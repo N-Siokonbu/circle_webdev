@@ -1,5 +1,5 @@
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll(".draggable-button").forEach((button, index) => {
+    document.querySelectorAll("#button-color").forEach((button, index) => {
         const dragHandle = button.querySelector(".drag-handle");
         let offsetX, offsetY, isDragging = false, moved = false;
 
@@ -16,6 +16,8 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!isDragging && !moved) {
                 alert(`${button.innerText} がクリックされました！`);
             }
+            button.style.backgroundColor = "gold";
+            console.log("完璧！");
             moved = false;
         });
 
@@ -54,3 +56,58 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
+
+// Websocketの実装
+    const socket = new WebSocket('ws://localhost:8080');
+    const updateButton = document.getElementById('update-button');
+    const toggleStatusButton = document.getElementById('toggle-status-button');
+    const jsonDataElement = document.getElementById('json-data');
+    let currentStatus = false; // 初期値
+
+    // サーバーからのメッセージを受信
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        jsonDataElement.textContent = JSON.stringify(data, null, 2); // JSONデータを表示
+        currentStatus = data.status;
+        toggleStatusButton.textContent = `ステータス: ${currentStatus ? 'ON' : 'OFF'}`;
+    };
+
+    // メッセージ更新ボタンのクリックイベント
+    /*
+    updateButton.addEventListener('click', () => {
+        const newMessage = messageInput.value;
+        if (newMessage) {
+            const updatePayload = {
+                type: 'updateMessage',
+                message: newMessage,
+                status: currentStatus // 現在のbool値を一緒に送信
+            };
+            socket.send(JSON.stringify(updatePayload));
+            messageInput.value = ''; // 入力欄をクリア
+        } else {
+            alert('メッセージを入力してください！');
+        }
+    });
+    */
+
+    // ステータス変更ボタンのクリックイベント
+    toggleStatusButton.addEventListener('click', () => {
+        currentStatus = !currentStatus; // true ⇔ false の切り替え
+        toggleStatusButton.textContent = `ステータス: ${currentStatus ? 'ON' : 'OFF'}`;
+        // ステータス変更をサーバーに送信
+        const updatePayload = {
+            type: 'updateStatus',
+            status: currentStatus
+        };
+        socket.send(JSON.stringify(updatePayload));
+    });
+
+    // WebSocketエラー処理
+    socket.onerror = (error) => {
+        console.error('WebSocket Error:', error);
+    };
+
+    // WebSocket接続が切れた場合の処理
+    socket.onclose = () => {
+        console.log('WebSocket connection closed');
+    };

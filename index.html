@@ -8,19 +8,26 @@
 </head>
 <body>
     <div id="button-container">
-        <button class="draggable-button">
+        <button id="button-color">
             ボタン1
             <div class="drag-handle"></div>
         </button>
-        <button class="draggable-button">
+        <button id="button-color">
             ボタン2
             <div class="drag-handle"></div>
         </button>
-        <button class="draggable-button">
+        <button id="button-color">
             ボタン3
             <div class="drag-handle"></div>
         </button>
     </div>
+
+    <h2>メッセージとステータスを更新</h2>
+    <button id="toggle-status-button">ステータス: OFF</button>
+
+    <h3>現在のデータ:</h3>
+    <pre id="json-data"></pre>
+
     <script src="script.js"></script>
 </body>
 </html>

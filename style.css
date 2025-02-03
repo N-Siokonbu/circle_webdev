@@ -4,6 +4,17 @@
   height: 100vh;
 }
 
+#button-color {
+  position: absolute;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
 .draggable-button {
   position: absolute;
   background-color: #007BFF;
