@@ -4,7 +4,7 @@
   height: 100vh;
 }
 
-#button-color {
+#button-color_1, #button-color_2, #button-color_3 {
   position: absolute;
   background-color: #007BFF;
   color: white;

@@ -1,5 +1,13 @@
+// Websocketの実装
+const socket = new WebSocket('ws://localhost:8080');
+const updateButton = document.getElementById('update-button');
+const toggleStatusButton = document.getElementById('button-color');
+const jsonDataElement = document.getElementById('json-data');
+let currentStatus = false; // 初期値
+let button_num = 1;
+
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("#button-color").forEach((button, index) => {
+    document.querySelectorAll("#button-color_1", "#button-color_2", "#button_color_3").forEach((button, index) => {
         const dragHandle = button.querySelector(".drag-handle");
         let offsetX, offsetY, isDragging = false, moved = false;
 
@@ -16,7 +24,6 @@ document.addEventListener("DOMContentLoaded", () => {
             if (!isDragging && !moved) {
                 alert(`${button.innerText} がクリックされました！`);
             }
-            button.style.backgroundColor = "gold";
             console.log("完璧！");
             moved = false;
         });
@@ -24,7 +31,6 @@ document.addEventListener("DOMContentLoaded", () => {
         // ステータス変更ボタンのクリックイベント
     button.addEventListener('click', () => {
         currentStatus = !currentStatus; // true ⇔ false の切り替え
-        button.textContent = `ステータス: ${currentStatus ? 'ON' : 'OFF'}`;
         // ステータス変更をサーバーに送信
         const updatePayload = {
             type: 'updateStatus',
@@ -33,6 +39,19 @@ document.addEventListener("DOMContentLoaded", () => {
         socket.send(JSON.stringify(updatePayload));
         console.log("成功しました！")
     });
+
+    // サーバーからのメッセージを受信
+    socket.onmessage = (event) => {
+        const data = JSON.parse(event.data);
+        jsonDataElement.textContent = JSON.stringify(data, null, 2); // JSONデータを表示
+        currentStatus = data.status;
+
+        if(data.status === true){
+            button.style.backgroundColor = "gold";
+        } else {
+            button.style.backgroundColor = "#007BFF"
+        }
+    };
 
         // ドラッグ開始
         dragHandle.addEventListener("mousedown", (e) => {
@@ -69,21 +88,6 @@ document.addEventListener("DOMContentLoaded", () => {
         });
     });
 });
-
-// Websocketの実装
-    const socket = new WebSocket('ws://localhost:8080');
-    const updateButton = document.getElementById('update-button');
-    const toggleStatusButton = document.getElementById('button-color');
-    const jsonDataElement = document.getElementById('json-data');
-    let currentStatus = false; // 初期値
-
-    // サーバーからのメッセージを受信
-    socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        jsonDataElement.textContent = JSON.stringify(data, null, 2); // JSONデータを表示
-        currentStatus = data.status;
-        toggleStatusButton.textContent = `ステータス: ${currentStatus ? 'ON' : 'OFF'}`;
-    };
 
     // WebSocketエラー処理
     socket.onerror = (error) => {
