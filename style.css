@@ -1,0 +1,31 @@
+#button-container {
+  position: relative;
+  width: 100vw;
+  height: 100vh;
+}
+
+.draggable-button {
+  position: absolute;
+  background-color: #007BFF;
+  color: white;
+  border: none;
+  padding: 20px 40px;
+  font-size: 18px;
+  border-radius: 8px;
+  cursor: pointer;
+}
+
+.drag-handle {
+  position: absolute;
+  width: 20px;
+  height: 20px;
+  bottom: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.3);
+  cursor: grab;
+  border-bottom-right-radius: 8px;
+}
+
+.drag-handle:active {
+  cursor: grabbing;
+}
