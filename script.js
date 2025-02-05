@@ -4,10 +4,11 @@ const updateButton = document.getElementById('update-button');
 const toggleStatusButton = document.getElementById('button-color');
 const jsonDataElement = document.getElementById('json-data');
 let currentStatus = false; // 初期値
-let button_num = 1;
+const button_data = document.querySelectorAll(".draggable-button");
 
 document.addEventListener("DOMContentLoaded", () => {
-    document.querySelectorAll("#button-color_1", "#button-color_2", "#button_color_3").forEach((button, index) => {
+    document.querySelectorAll(".draggable-button").forEach((button, index) => {
+        console.log(button)
         const dragHandle = button.querySelector(".drag-handle");
         let offsetX, offsetY, isDragging = false, moved = false;
 
@@ -23,35 +24,31 @@ document.addEventListener("DOMContentLoaded", () => {
         button.addEventListener("click", () => {
             if (!isDragging && !moved) {
                 alert(`${button.innerText} がクリックされました！`);
+
+                currentStatus = !currentStatus; // true ⇔ false の切り替え
+                // ステータス変更をサーバーに送信
+                const updatePayload = {
+                type: 'updateStatus',
+                status: currentStatus
+                };
+                socket.send(JSON.stringify(updatePayload));
+                console.log("成功しました！")
             }
-            console.log("完璧！");
             moved = false;
         });
 
-        // ステータス変更ボタンのクリックイベント
-    button.addEventListener('click', () => {
-        currentStatus = !currentStatus; // true ⇔ false の切り替え
-        // ステータス変更をサーバーに送信
-        const updatePayload = {
-            type: 'updateStatus',
-            status: currentStatus
+        // サーバーからのメッセージを受信
+        socket.onmessage = (event) => {
+            const data = JSON.parse(event.data);
+            jsonDataElement.textContent = JSON.stringify(data, null, 2); // JSONデータを表示
+            currentStatus = data.status;
+
+            if(data.status === true){
+                button_data[0].style.backgroundColor = "gold";
+            } else {
+                button_data[0].style.backgroundColor = "#007BFF"
+            }
         };
-        socket.send(JSON.stringify(updatePayload));
-        console.log("成功しました！")
-    });
-
-    // サーバーからのメッセージを受信
-    socket.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        jsonDataElement.textContent = JSON.stringify(data, null, 2); // JSONデータを表示
-        currentStatus = data.status;
-
-        if(data.status === true){
-            button.style.backgroundColor = "gold";
-        } else {
-            button.style.backgroundColor = "#007BFF"
-        }
-    };
 
         // ドラッグ開始
         dragHandle.addEventListener("mousedown", (e) => {
