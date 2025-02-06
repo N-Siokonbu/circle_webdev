@@ -50,7 +50,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
             if(data.status === true){
                 for(let i = 0; i < 3; i++) {
-                    button_data[a].style.backgroundColor = "gold";
+                    button_data[i].style.backgroundColor = "gold";
                 }
             } else {
                 for(let i = 0; i < 3; i++) {
