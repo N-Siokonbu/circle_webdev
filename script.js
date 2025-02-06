@@ -29,10 +29,14 @@ document.addEventListener("DOMContentLoaded", () => {
                 // ステータス変更をサーバーに送信
                 const updatePayload = {
                 type: 'updateStatus',
-                status: currentStatus
+                status: currentStatus,
                 };
                 socket.send(JSON.stringify(updatePayload));
                 console.log("成功しました！")
+
+                // LocalStorageにstatusを保存
+                let status_log = updatePayload.status;
+                localStorage.setItem(currentStatus, status_log);
             }
             moved = false;
         });
@@ -42,11 +46,16 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = JSON.parse(event.data);
             jsonDataElement.textContent = JSON.stringify(data, null, 2); // JSONデータを表示
             currentStatus = data.status;
+            button_name = index;
 
             if(data.status === true){
-                button_data[0].style.backgroundColor = "gold";
+                for(let i = 0; i < 3; i++) {
+                    button_data[a].style.backgroundColor = "gold";
+                }
             } else {
-                button_data[0].style.backgroundColor = "#007BFF"
+                for(let i = 0; i < 3; i++) {
+                    button_data[i].style.backgroundColor = "#007BFF";
+                }
             }
         };
 

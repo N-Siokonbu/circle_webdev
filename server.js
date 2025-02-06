@@ -5,7 +5,7 @@ const wss = new WebSocket.Server({ port: 8080 });
 let jsonData = {
   message: "Hello, world!",
   timestamp: new Date().toISOString(),
-  status: false // 初期状態
+  status: false, // 初期状態
 };
 
 wss.on('connection', (ws) => {
