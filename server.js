@@ -2,14 +2,19 @@ const WebSocket = require('ws');
 
 const wss = new WebSocket.Server({ port: 8080 });
 
-let jsonData = {
-  message: "Hello, world!",
-  timestamp: new Date().toISOString(),
-  status: false, // 初期状態
-};
+// クライアントごとのデータを格納するオブジェクト
+const clientData = new Map();
 
 wss.on('connection', (ws) => {
   console.log('New client connected');
+
+  // クライアントごとに初期データを作成
+  const clientId = Date.now().toString(); // 一意のID (タイムスタンプ)
+  clientData.set(ws, {
+    message: "Hello, Client!",
+    timestamp: new Date().toISOString(),
+    status: false
+  })
 
   // クライアント接続時に現在のデータを送信
   ws.send(JSON.stringify(jsonData));
