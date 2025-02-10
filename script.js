@@ -23,7 +23,7 @@ document.addEventListener("DOMContentLoaded", () => {
         // クリック時の動作（ドラッグしていない場合のみ）
         button.addEventListener("click", () => {
             if (!isDragging && !moved) {
-                alert(`${button.innerText} がクリックされました！`);
+                alert(`${button.innerText} ボタンが押されました！さすがぁ！`);
 
                 currentStatus = !currentStatus; // true ⇔ false の切り替え
                 // ステータス変更をサーバーに送信
