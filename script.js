@@ -1,5 +1,5 @@
 // Websocketの実装
-const socket = new WebSocket('ws://localhost:8080');
+const socket = new WebSocket('ws://192.168.0.5:8080'); // IPaddressは要変更
 const updateButton = document.getElementById('update-button');
 const toggleStatusButton = document.getElementById('button-color');
 const jsonDataElement = document.getElementById('json-data');
