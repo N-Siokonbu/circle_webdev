@@ -48,6 +48,7 @@ document.addEventListener("DOMContentLoaded", () => {
             currentStatus = data.status;
             button_name = index;
 
+            // status で色を変更
             if(data.status === true){
                 for(let i = 0; i < 3; i++) {
                     button_data[i].style.backgroundColor = "gold";
