@@ -46,7 +46,7 @@ document.addEventListener("DOMContentLoaded", () => {
             const data = JSON.parse(event.data);
             jsonDataElement.textContent = JSON.stringify(data, null, 2); // JSONデータを表示
             currentStatus = data.status;
-            button_name = index;
+            
 
             // status で色を変更
             if(data.status === true){
