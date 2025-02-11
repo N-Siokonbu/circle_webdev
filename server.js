@@ -22,6 +22,9 @@ wss.on('connection', (ws) => {
   ws.on('message', (message) => {
     try {
       const data = JSON.parse(message);
+      const clientData = clientData.get(ws);
+
+      if(!clientData) return;
 
       if (data.type === 'updateMessage') {
         jsonData.message = data.message;
@@ -31,14 +34,17 @@ wss.on('connection', (ws) => {
       }
 
       jsonData.timestamp = new Date().toISOString(); // タイムスタンプを更新
-      console.log('Data updated:', jsonData);
+      console.log(`Data updated for client ${clientId}:`, jsonData);
+
+      // 更新されたデータのみクライアントに送信
+      ws.send(JSON.stringify(clientData));
 
       // すべてのクライアントにデータを送信
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify(jsonData));
-        }
-      });
+      // wss.clients.forEach((client) => {
+      //   if (client.readyState === WebSocket.OPEN) {
+      //     client.send(JSON.stringify(jsonData));
+      //   }
+      // });
     } catch (error) {
       console.error('Invalid message received:', error);
     }
